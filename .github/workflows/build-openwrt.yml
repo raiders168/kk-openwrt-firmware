@@ -30,7 +30,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -60,6 +60,25 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        
+    - name: luci-theme-argon install
+      run: |
+       cd openwrt
+       cd package/lean  
+       rm -rf luci-theme-argon  
+       git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
+       
+    - name: luci-app-argon-config install
+      run: |
+       cd openwrt
+       cd package/lean  
+       git clone https://github.com/jerrykuku/luci-app-argon-config.git
+       
+    - name: aliyundrive-webdav
+      run: |
+        cd openwrt/package 
+        git clone https://github.com/messense/aliyundrive-webdav.git
+    
 
     - name: Load custom feeds
       run: |
@@ -184,7 +203,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 3
+        keep_latest: 20
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
