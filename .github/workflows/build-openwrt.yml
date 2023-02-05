@@ -78,7 +78,13 @@ jobs:
       run: |
         cd openwrt/package 
         git clone https://github.com/messense/aliyundrive-webdav.git
-    
+        
+    - name: Hello World
+      run: |
+        cd openwrt
+        cd package/lean 
+        git clone https://github.com/jerrykuku/lua-maxminddb.git  
+        git clone https://github.com/jerrykuku/luci-app-vssr.git 
 
     - name: Load custom feeds
       run: |
